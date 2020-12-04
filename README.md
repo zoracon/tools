@@ -1,2 +1,2 @@
 # useful-bashing
-Don't bash people, bash scripts
+Hello Bash, my old friend
