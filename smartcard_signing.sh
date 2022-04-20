@@ -21,24 +21,12 @@ echo '
 
 set -e
 
-# if no arguments are provided, return usage function
-if [ $# -eq 0 ]; then
-  echo "Usage: <compressed codebase or file> --sign-scheme=[RSA || ECC]"
-  exit
+if [ $# -lt 1 ]; then
+  echo "Usage: $0 [-s <RSA|ECC>]"
+  exit 1
 fi
 
-SIGNSCHEME='RSA'
-
-# while [ "$2" != "" ]; do
-#     case $2 in
-#     --sign-scheme)
-#         shift # remove `-t` or `--tag` from `$2`
-#         SIGNSCHEME=$2
-#         echo $2
-#         ;;
-#     esac
-# done
-
+SIGNSCHEME=$3
 TIMESTAMP=`date +%s`
 
 echo 'SHA512 Hash for signing:'
