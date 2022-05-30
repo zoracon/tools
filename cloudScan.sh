@@ -23,23 +23,23 @@ SCANMORE=$2
 
 if [ $SCANMORE ]; then
     #Output Port Scans to txt file to parse
-    if [ $SCANMORE = 'true' ]
-    then
-      echo "Scanning ports 1-7000"
-      sudo masscan -iL $IPS -p1-7000
-    else 
-      echo "Scanning ports 1-1024"
-      sudo masscan -iL $IPS -p1-1024
-    fi
+    echo "Scanning ports 1-7000"
+    sudo masscan -iL $IPS -p1-7000 -oJ masscan1.json
+else 
+    echo "Scanning ports 1-1024"
+    sudo masscan -iL $IPS -p1-1024 -oJ masscan1.json
 fi
+ 
+# remove last commma :/
+
+sudo jq '.[] | .ports | .[].port' masscan1.json >> ports.txt
 
 # Take parsed file with ports and enter command:
 # Take argument for output dir
-# sudo nmap -e tap0 -iL ips.txt -p [ports] -Pn -A -oA [outputdir]
+sudo nmap -iL ips.txt -p `cat ports.txt` -Pn -A -oA *
 
 # parse nmap scan for services...choose names and input into nmap scripts scan
-#sudo nmap -e tap0 -iL ips.txt -p
-#80,22,6379,27017 -Pn -oA [outputdir] -O -sV --script=[redis*,mongo*]
+sudo nmap -iL ips.txt -p `cat ports.txt` -Pn -oA * -O -sV --script=[redis*,mongo*]
 
 
 
