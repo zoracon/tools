@@ -10,8 +10,8 @@ echo '
                                                     
 '
 
-# Check if masscan installed, if not
-# sudo apt install masscan
+# Needs masscan, nmap, jq, xq packages to run
+# TODO: Put this into a docker file...
 
 if [ $# -lt 1 ]; then
   echo "Usage: $0 <hostipfiles> <true>"
