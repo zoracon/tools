@@ -30,21 +30,20 @@ SIGNSCHEME=$3
 TIMESTAMP=`date +%s`
 
 echo 'SHA512 Hash for signing:'
-sha512sum $0 | cut -f1 -d' '
+sha512sum $1 | cut -f1 -d' '
 
-openssl dgst -sha512 -binary $0 > $0.sha512
+openssl dgst -sha512 -binary $1 > $1.sha512
 
 if [[ $SIGNSCHEME = 'RSA' ]]; then
     echo 'RSA based cert: Signing SHA512 hash with RSA-PKCS-PSS...'
-    pkcs11-tool --module /usr/lib/x86_64-linux-gnu/libykcs11.so --sign --id 2 -m RSA-PKCS-PSS --mgf MGF1-SHA512 --hash-algorithm SHA512 --salt-len 32 -i $0.sha512 -o $0-signature.$TIMESTAMP.sha512
+    pkcs11-tool --module /usr/lib/x86_64-linux-gnu/libykcs11.so --sign --id 2 -m RSA-PKCS-PSS --mgf MGF1-SHA512 --hash-algorithm SHA512 --salt-len 32 -i $1.sha512 -o $1-signature.$TIMESTAMP.sha512
     
     echo 'Verifying signature...'
-    openssl dgst -sha512 -sigopt rsa_padding_mode:pss -sigopt rsa_pss_saltlen:32 -verify pubkey.pem -signature $0-signature.$TIMESTAMP.sha512 $0
+    openssl dgst -sha512 -sigopt rsa_padding_mode:pss -sigopt rsa_pss_saltlen:32 -verify pubkey.pem -signature $1-signature.$TIMESTAMP.sha512 $1
 else
     echo 'ECC based cert: Signing SHA512 hash with ECDSA-SHA1...'
-    pkcs11-tool --module /usr/lib/x86_64-linux-gnu/libykcs11.so --sign --id 1 -m ECDSA-SHA1 --signature-format openssl -i $0 -o $0.sig
+    pkcs11-tool --module /usr/lib/x86_64-linux-gnu/libykcs11.so --sign --id 1 -m ECDSA-SHA1 --signature-format openssl -i $1 -o $1.sig
     
     echo 'Verifying signature...'
-    openssl dgst -sha512 -verify pubkey.pem -signature $0.sig $0
+    openssl dgst -sha512 -verify pubkey.pem -signature $1.sig $1
 fi
-
