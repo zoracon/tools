@@ -1,2 +1,4 @@
 ### Scan repos for compromised secrets
-sudo docker run -it -v "$PWD:/pwd" trufflesecurity/trufflehog:latest github --org=<org>                                                                    at 01:31:46 PM
+```bash
+sudo docker run -it -v "$PWD:/pwd" trufflesecurity/trufflehog:latest github --org=<org>
+````
