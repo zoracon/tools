@@ -6,8 +6,3 @@
 
 ## Pentest Tools
 - Cloud Scale Masscan Nmap Scanner (masscan and nmap combined to automate granular scans)
-
-## Misc
-- Weather redo (but then realized I could just use `curl wttr.in`) 
-
-
