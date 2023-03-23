@@ -1,4 +1,12 @@
 // This go file will collect the host's system and networking info
+
+/*
+	Example Usage: 
+	$ go mod init
+	$ go build
+	$ go run hostinfo.go | jq > host.json
+
+*/
 package main
 
 import (
@@ -58,9 +66,9 @@ func getProcesses() string {
 }
 
 
-// post strings to flask server
+// post strings to json
 func listData(info string, net string, routes string, connections string, processes string) {
-	jsonData := map[string]string{"SYS INFO": info, "NET INFO": net, "ARP": routes, "Connections": connections, "PROCESSES RUNNING": processes}
+	jsonData := map[string]string{"SYS INFO": info, "NET INFO": net, "ARP": routes, "CONNECTIONS": connections, "PROCESSES RUNNING": processes}
 	jsonValue, _ := json.Marshal(jsonData)
 	fmt.Println(string(jsonValue))
 	return
