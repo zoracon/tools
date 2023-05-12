@@ -1,90 +1,121 @@
-// This go file will collect the host's system and networking info
-
-/*
-	Example Usage: 
-	$ go mod init
-	$ go build
-	$ go run hostinfo.go | jq > host.json
-
-*/
 package main
 
 import (
 	"encoding/json"
-	"os/exec"
 	"fmt"
+	"os"
+	"os/exec"
 )
 
-// return O.S. version etc
-func getOsInfo() string {
-	cmd := exec.Command("/bin/sh", "-c", "uname -a")
+const (
+	unameCommand = "uname -a"
+	ifconfigCommand = "ifconfig"
+	arpCommand = "arp -a"
+	netstatCommand = "netstat -a"
+	psCommand = "ps -e"
+)
+
+// GetOSInfo returns the operating system information.
+func GetOSInfo() (string, error) {
+	cmd := exec.Command("/bin/sh", "-c", unameCommand)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		return "Err"
+		return "", err
 	}
-	return string(out)
+	return string(out), nil
 }
 
-// return Network interface information
-func getNetInterface() string {
-	cmd := exec.Command("/bin/sh", "-c", "ifconfig")
+// GetNetInterface returns the network interface information.
+func GetNetInterface() (string, error) {
+	cmd := exec.Command("/bin/sh", "-c", ifconfigCommand)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		return "Err"
+		return "", err
 	}
-	return string(out)
+	return string(out), nil
 }
 
-// return ARP table 
-func getRoutes() string {
-	cmd := exec.Command("/bin/sh", "-c", "arp -a")
+// GetARPTable returns the ARP table.
+func GetARPTable() (string, error) {
+	cmd := exec.Command("/bin/sh", "-c", arpCommand)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		return "Err"
+		return "", err
 	}
-	return string(out)
+	return string(out), nil
 }
 
-// return network connections
-func getConnects() string {
-	cmd := exec.Command("/bin/sh", "-c", "netstat -a")
+// GetNetworkConnections returns the network connections.
+func GetNetworkConnections() (string, error) {
+	cmd := exec.Command("/bin/sh", "-c", netstatCommand)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		return "Err"
+		return "", err
 	}
-	return string(out)
+	return string(out), nil
 }
 
-// return running processes
-func getProcesses() string {
-	cmd := exec.Command("/bin/sh", "-c", "ps -e")
+// GetRunningProcesses returns the running processes.
+func GetRunningProcesses() (string, error) {
+	cmd := exec.Command("/bin/sh", "-c", psCommand)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		return "Err"
+		return "", err
 	}
-	return string(out)
+	return string(out), nil
 }
 
+// ListData lists the system and networking information in JSON format.
+func ListData() error {
+	osInfo, err := GetOSInfo()
+	if err != nil {
+		return err
+	}
+	netInterface, err := GetNetInterface()
+	if err != nil {
+		return err
+	}
+	arpTable, err := GetARPTable()
+	if err != nil {
+		return err
+	}
+	networkConnections, err := GetNetworkConnections()
+	if err != nil {
+		return err
+	}
+	runningProcesses, err := GetRunningProcesses()
+	if err != nil {
+		return err
+	}
 
-// post strings to json
-func listData(info string, net string, routes string, connections string, processes string) {
-	jsonData := map[string]string{"SYS INFO": info, "NET INFO": net, "ARP": routes, "CONNECTIONS": connections, "PROCESSES RUNNING": processes}
-	jsonValue, _ := json.Marshal(jsonData)
-	fmt.Println(string(jsonValue))
-	return
-}
+	jsonData := map[string]string{
+		"OS INFO":   osInfo,
+		"NET INFO":  netInterface,
+		"ARP TABLE": arpTable,
+		"NETWORK CONNECTIONS": networkConnections,
+		"RUNNING PROCESSES": runningProcesses,
+	}
 
-// fetch data then send it
-func run() {
-	info := getOsInfo()
-	net := getNetInterface()
-	routes := getRoutes()
-	connections := getConnects()
-	processes := getProcesses()
+	// Write the JSON data to a file.
+	file, err := os.Create("host.json")
+	if err != nil {
+		return err
+	}
+	defer file.Close()
 
-	listData(info, net, routes, connections, processes)
+	encoder := json.NewEncoder(file)
+	err = encoder.Encode(jsonData)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func main() {
-	run()
+	err := ListData()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
