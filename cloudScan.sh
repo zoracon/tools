@@ -11,6 +11,8 @@ echo '
 '
 
 # Needs masscan, nmap, jq, xq packages to run
+# Get latest masscan or get malformed json https://github.com/robertdavidgraham/masscan
+# pip install yq for xq
 # TODO: Put this into a docker file...
 
 if [ $# -lt 1 ]; then
@@ -34,14 +36,14 @@ echo "Extracting Ports Found"
 sudo jq -c '.[] | .ports | .[].port' masscan.json | sed -z 's/\n/,/g;s/,$/\n/' >> ports.txt
 
 echo "Start nmap scan of ports"
-sudo nmap -iL ips.txt -p `cat ports.txt` -Pn -A -oA *
+sudo nmap -iL $IPS -p `cat ports.txt` -Pn -A -oA *
 
 echo "letting scan finish with a forced sleep"
 
 sleep 5
 
 echo "parsing services..."
-cat cloudScan.sh.xml | xq '.nmaprun.host.ports.port | .[].service."@name"' | sed -z 's/\n/*,/g;s/"//g' >> services.txt
+cat DOCS.xml | xq '.nmaprun.host.ports.port | .[].service."@name"' | sed -z 's/\n/*,/g;s/"//g' >> services.txt
 
 echo "Now try some scripts..." 
 # Input your scripts from services.txt
