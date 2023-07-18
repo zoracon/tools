@@ -1,4 +1,4 @@
-# Random Tools
+# Investigation Tools
 
 ## SSL/TLS
 - Openssl Expiry (expiration date of SSL cert when given a domain name)
