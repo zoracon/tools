@@ -22,7 +22,10 @@
 # Initial Look
 
 ## List packages
-`adb shell pm list packages -f -3`
+`adb shell pm list packages`
+## Pull Packages
+`adb shell pm path com...`
+`adb pull path [path] [dest]`
 
 ## Logcat
 - `adb logcat | grep "com.[...].[...]"`
