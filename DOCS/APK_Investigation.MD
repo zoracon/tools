@@ -47,13 +47,19 @@ Example: `am start -n [packagename]/[activity name]`
 Extract Classes.dex `unzip -j <apkfile.apk> classes.dex`
 
 # Traffic
+
+## TCP
 - TCP Listen and Wireshark, With `toybox`
 ```
 generic_x86_arm:/system/xbin # tcpdump -i wlan0 -s0 -w - | toybox nc -l -p 11111
 C:\Users\Alexis>ncat localhost 11111 | "C:\Program Files\Wireshark\Wireshark" -k -S -i -
 ```
+## HTTP
 - Raspberry Pi + MITMProxy
 - HTTP Toolkit
+
+## DNS
+PiHole
 
 # APK Decompile
 - `apktool d [apk]`
