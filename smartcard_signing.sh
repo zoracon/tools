@@ -12,7 +12,7 @@
 # Generate the pair on slot 9c (Digital Signature) and export pem file
 # To generate public key file:
 #   openssl x509 -in cert.pem -pubkey -noout > pubkey.pem
-#   OR pkcs15-tool --read-public-key 02
+#   OR pkcs15-tool --read-public-key 02 > pubkey.pem
 # Upload public key to source that wants to trust it!
 echo '
     ___       ______                __   _____ _           
@@ -40,6 +40,8 @@ echo $1
 openssl dgst -sha256 -binary $1 > $1.sha256
 
 echo 'Signing SHA256 hash with ECDSA-SHA256...'
-pkcs11-tool --module /usr/lib/x86_64-linux-gnu/libykcs11.so --sign --id 2 -m ECDSA-SHA256 --signature-format openssl -i $1.sha256 -o $1.sha256.sig
+# Might need to specify module, but system default is usually okay
+# Example: --module /usr/lib/x86_64-linux-gnu/libykcs11.so
+pkcs11-tool --sign --id 2 -m ECDSA-SHA256 --signature-format openssl -i $1.sha256 -o $1.sha256.sig
 echo 'Verifying signature...'
 openssl dgst -sha256 -verify pubkey.pem -signature $1.sha256.sig $1.sha256
