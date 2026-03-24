@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Connect your Pixel device
-# run "adb devices" to check adb picked up your device
+# run "adb devices" to check if adb picked up your device
 # If you have multiple because of various emulators, disconnect emulators first
 
 echo "🍬 Starting Pixel device verification"
