@@ -1,8 +1,14 @@
 #!/bin/bash
 
+# Connect your Pixel device
+# run "adb devices" to check adb picked up your device
+# If you have multiple because of various emulators, disconnect emulators first
+
 # Verify required commands exist
 command -v adb >/dev/null 2>&1 || { echo "Error: adb is required but not installed. Download @ https://developer.android.com/tools/releases/platform-tools"; exit 1; }
 
+# Shallow clone of avb tool
+# More info: https://android.googlesource.com/platform/external/avb/+/master/README.md
 git clone --depth=1  https://android.googlesource.com/platform/external/avb avb
 
 FINGERPRINT=$(adb shell getprop ro.build.fingerprint)
