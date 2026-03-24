@@ -12,14 +12,12 @@ echo "-------------------------------------"
 # Verify required commands exist
 command -v adb >/dev/null 2>&1 || { echo "Error: adb is required but not installed. Download @ https://developer.android.com/tools/releases/platform-tools"; exit 1; }
 
-
 echo "🕸️ Shallow cloning avb tool..."
 echo "-------------------------------------"
 
 # Shallow clone of avb tool
 # More info: https://android.googlesource.com/platform/external/avb/+/master/README.md
 git clone --depth=1  https://android.googlesource.com/platform/external/avb avb
-
 
 echo "📝 Collecting device information and running verification..."
 echo "-------------------------------------"
