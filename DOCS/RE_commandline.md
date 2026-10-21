@@ -1,4 +1,4 @@
-# 1 Cyber Ops and Bash
+# Cyber Ops and Bash
 
 - Ref: PDF_book
 
