@@ -1,5 +1,7 @@
 package main
 
+// This program collects system and networking information and writes it to a JSON file.
+
 import (
 	"encoding/json"
 	"fmt"
