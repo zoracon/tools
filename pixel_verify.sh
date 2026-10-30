@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Replaced by Uraniborg tool suite
 # Connect your Pixel device
 # run "adb devices" to check adb picked up your device
 # If you have multiple because of various emulators, disconnect emulators first
