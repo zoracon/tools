@@ -22,4 +22,4 @@ echo "🤖 Analyzing diff against '$TARGET_BRANCH' using Ollama ($MODEL)..."
 echo "------------------------------------------------------------"
 
 # Send both the system prompt and the code diff to Ollama
-ollama run "$MODEL" "$SYSTEM_PROMPT\n\nCode Diff:\n$DIFF"
+ollama run "$MODEL" "$SYSTEM_PROMPT\n\nCode Diff:\n$DIFF" > review_feedback.md
